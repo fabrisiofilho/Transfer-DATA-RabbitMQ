@@ -1,5 +1,6 @@
 package br.fabrisio.catraca.controller;
 
+import br.fabrisio.catraca.message.RabbitMessage;
 import br.fabrisio.catraca.population.PopulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ public class CatracaController {
 
     @GetMapping()
     public void isEmailOrUsernameInUse() {
-        populationService.integration();
+        populationService.integration(RabbitMessage.builder().amount(0).build());
     }
 
 }

@@ -15,6 +15,9 @@ public interface WorkerRepository extends JpaRepository<WorkerEntity, UUID>  {
     @Query(value = "SELECT * FROM worker as w WHERE w.integrated = false LIMIT 1000", nativeQuery = true)
     List<WorkerEntity> findByWorkerToIntegration();
 
+    @Query(value = "SELECT COUNT(*) FROM worker as w WHERE w.integrated = false", nativeQuery = true)
+    Long findCountTotalWorkers();
+
     @Transactional
     @Modifying
     @Query("UPDATE WorkerEntity w SET w.integrated = true WHERE w.id IN (:workerEntities)")

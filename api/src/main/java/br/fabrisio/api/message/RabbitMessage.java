@@ -19,5 +19,7 @@ public class RabbitMessage implements Serializable {
     private UUID code;
     private String service;
     private String description;
+    private Integer amount;
+    private Long total;
     private List<WorkerEntity> workers;
 }

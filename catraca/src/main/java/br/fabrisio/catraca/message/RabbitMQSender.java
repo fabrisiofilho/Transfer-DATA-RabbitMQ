@@ -13,7 +13,6 @@ public class RabbitMQSender {
     private RabbitTemplate rabbitTemplate;
 
     public void sendExchangeDirectMessageByServiceTwo(RabbitMessage rabbitMessage) {
-        log.info("Send message to RabbitMQ Direct Exchange - Service Two");
         rabbitTemplate.convertAndSend("direct.exchange", "api", rabbitMessage);
     }
 

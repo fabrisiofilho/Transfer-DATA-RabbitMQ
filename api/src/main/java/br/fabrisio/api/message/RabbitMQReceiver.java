@@ -26,17 +26,19 @@ public class RabbitMQReceiver {
     }
 
     private void logginInfo(RabbitMessage rabbitMessage) {
-        log.info("Service One - Recieved Message From RabbitMQ: By "
-                + rabbitMessage.getService() + " Exchange type: "
-                + rabbitMessage.getDescription() + " { CODE: "+ rabbitMessage.getCode() + " }");
+        log.info("Recebendo dados de integração" +
+                " - Quantidade: " +
+                rabbitMessage.getAmount() + "/" + rabbitMessage.getTotal());
         workerRepository.saveAll(rabbitMessage.getWorkers());
 
         rabbitMQSender.sendExchangeDirectMessageByServiceTwo(RabbitMessage
                 .builder()
                 .service("catraca")
                 .code(UUID.randomUUID())
+                .amount(rabbitMessage.getAmount())
+                .total(rabbitMessage.getTotal())
                 .description("Sincronizando trabalhadores")
-                .workers(new ArrayList<>())
+                .workers(rabbitMessage.getWorkers())
                 .build());
     }
 

@@ -33,17 +33,24 @@ public class PopulationService {
         }
     }
 
-    public void integration() {
+    public void integration(RabbitMessage rabbitMessage) {
         var workers = workerRepository.findByWorkerToIntegration();
-        var idArray = workers.stream().map(WorkerEntity::getId).toList();
 
-        workerRepository.setIntegration(idArray);
+        Long totalWorkers = null;
+
+        if (rabbitMessage.getTotal() == null) {
+            totalWorkers = workerRepository.findCountTotalWorkers();
+        } else {
+            totalWorkers = rabbitMessage.getTotal();
+        }
 
         if (!workers.isEmpty()) {
             rabbitMQSender.sendExchangeDirectMessageByServiceTwo(RabbitMessage
                     .builder()
                     .service("catraca")
                     .code(UUID.randomUUID())
+                    .amount(workers.size() + rabbitMessage.getAmount())
+                    .total(totalWorkers)
                     .description("Sincronizando trabalhadores")
                     .workers(workers)
                     .build());
